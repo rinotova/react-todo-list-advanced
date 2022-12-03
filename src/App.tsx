@@ -5,6 +5,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import NewNote from './components/NewNote';
 import useLocalStorage from './hooks/useLocalStorage';
 import { v4 as uuidV4 } from 'uuid';
+import NoteList from './components/NoteList';
 
 export type Note = {
   id: string;
@@ -51,16 +52,29 @@ function App() {
     ]);
   };
 
+  const addTag = (tag: Tag) => {
+    setTags((prev) => [...prev, tag]);
+  };
+
   return (
-    <Container className='my-4'>
+    <Container className="my-4">
       <Routes>
-        <Route path='/' element={<h1>Home</h1>} />
-        <Route path='/new' element={<NewNote onSubmit={onCreateNote} />} />
-        <Route path='/:id'>
+        <Route path="/" element={<NoteList availableTags={tags} />} />
+        <Route
+          path="/new"
+          element={
+            <NewNote
+              onAddTag={addTag}
+              onSubmit={onCreateNote}
+              availableTags={tags}
+            />
+          }
+        />
+        <Route path="/:id">
           <Route index element={<h1>Show</h1>} />
-          <Route path='edit' element={<h1>Edit</h1>} />
+          <Route path="edit" element={<h1>Edit</h1>} />
         </Route>
-        <Route path='*' element={<Navigate to='/' />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Container>
   );
